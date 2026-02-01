@@ -1,5 +1,6 @@
 import { Heart, MapPin, Verified } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 export interface ListingData {
   id: string;
@@ -23,10 +24,24 @@ interface ListingCardProps {
 }
 
 export function ListingCard({ listing, onSave }: ListingCardProps) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/listing/${listing.id}`);
+  };
+
+  const handleSave = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSave?.(listing.id);
+  };
+
   return (
-    <article className={`relative bg-card rounded-xl overflow-hidden shadow-card ${
-      listing.isPromoted ? "promoted-glow ring-1 ring-primary/20" : ""
-    }`}>
+    <article 
+      onClick={handleClick}
+      className={`relative bg-card rounded-xl overflow-hidden shadow-card cursor-pointer tap-highlight ${
+        listing.isPromoted ? "promoted-glow ring-1 ring-primary/20" : ""
+      }`}
+    >
       {/* Image */}
       <div className="relative aspect-square">
         <img 
@@ -38,7 +53,7 @@ export function ListingCard({ listing, onSave }: ListingCardProps) {
         
         {/* Save button */}
         <button 
-          onClick={() => onSave?.(listing.id)}
+          onClick={handleSave}
           className="absolute top-2 right-2 w-8 h-8 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center tap-highlight"
         >
           <Heart 
