@@ -4,9 +4,11 @@ import { BottomNav } from "@/components/layout/BottomNav";
 import { PromotedFeed } from "@/components/feed/PromotedFeed";
 import { FollowingSellers } from "@/components/feed/FollowingSellers";
 import { AISearchDrawer } from "@/components/search/AISearchDrawer";
+import { SellDrawer } from "@/components/sell/SellDrawer";
 
 const Index = () => {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [sellOpen, setSellOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -20,9 +22,10 @@ const Index = () => {
         <PromotedFeed />
       </main>
 
-      <BottomNav />
+      <BottomNav onSellClick={() => setSellOpen(true)} />
       
       <AISearchDrawer open={searchOpen} onOpenChange={setSearchOpen} />
+      <SellDrawer open={sellOpen} onOpenChange={setSellOpen} />
     </div>
   );
 };
