@@ -33,9 +33,9 @@ export function BottomNav({ onSellClick }: BottomNavProps) {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border safe-bottom">
-      <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
-        {navItems.map((item) => {
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-border">
+      <div className="flex items-center h-16 max-w-lg mx-auto safe-bottom">
+        {navItems.map((item, index) => {
           const Icon = item.icon;
           const isSell = item.label === "Sell";
           const isActive = item.path === location.pathname;
@@ -44,12 +44,12 @@ export function BottomNav({ onSellClick }: BottomNavProps) {
             <button
               key={item.label}
               onClick={() => handleClick(item)}
-              className={`flex flex-col items-center justify-center gap-0.5 tap-highlight ${
-                isSell ? "relative -mt-4" : "py-2 px-4"
+              className={`flex-1 flex flex-col items-center justify-center tap-highlight ${
+                isSell ? "relative" : ""
               }`}
             >
               {isSell ? (
-                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 -mt-5 rounded-full bg-primary flex items-center justify-center shadow-lg">
                   <Icon className="w-6 h-6 text-primary-foreground" />
                 </div>
               ) : (
@@ -60,7 +60,7 @@ export function BottomNav({ onSellClick }: BottomNavProps) {
                     }`} 
                   />
                   <span 
-                    className={`text-[10px] font-medium ${
+                    className={`text-[10px] font-medium mt-0.5 ${
                       isActive ? "text-primary" : "text-muted-foreground"
                     }`}
                   >
