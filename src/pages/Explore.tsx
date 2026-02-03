@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Search, TrendingUp, MapPin, Clock, Flame, Filter } from "lucide-react";
+import { Search, TrendingUp, MapPin, Clock, Flame, Filter, SlidersHorizontal } from "lucide-react";
 import { ListingCard, ListingData } from "@/components/listing/ListingCard";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import { BottomNav } from "@/components/layout/BottomNav";
+import { SellDrawer } from "@/components/sell/SellDrawer";
 
 const categories = [
   { id: "all", label: "All", emoji: "🔥" },
-  { id: "vehicles", label: "Vehicles", emoji: "🚗" },
-  { id: "electronics", label: "Electronics", emoji: "📱" },
-  { id: "property", label: "Property", emoji: "🏠" },
+  { id: "vehicles", label: "Auto", emoji: "🚗" },
+  { id: "electronics", label: "Tech", emoji: "📱" },
+  { id: "property", label: "Home", emoji: "🏠" },
   { id: "fashion", label: "Fashion", emoji: "👗" },
   { id: "sports", label: "Sports", emoji: "⚽" },
   { id: "gaming", label: "Gaming", emoji: "🎮" },
@@ -129,42 +130,37 @@ export default function Explore() {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [sellOpen, setSellOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      {/* Header */}
+      {/* Compact Sticky Header */}
       <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border safe-top">
-        <div className="flex items-center gap-3 px-4 py-3">
-          <button onClick={() => navigate(-1)} className="tap-highlight">
-            <ArrowLeft className="w-6 h-6 text-foreground" />
-          </button>
-          <h1 className="text-lg font-semibold text-foreground">Explore</h1>
-        </div>
-
-        {/* Search Bar */}
-        <div className="px-4 pb-3 flex gap-2">
+        {/* Search Row */}
+        <div className="flex items-center gap-2 px-4 py-3">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
+            <input
+              type="text"
               placeholder="Search items..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 bg-muted border-0"
+              className="w-full h-10 pl-9 pr-4 bg-muted rounded-xl text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20"
             />
           </div>
-          <button className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center tap-highlight">
-            <Filter className="w-5 h-5 text-foreground" />
+          <button className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center tap-highlight">
+            <SlidersHorizontal className="w-5 h-5 text-foreground" />
           </button>
         </div>
 
-        {/* Category Pills */}
-        <div className="px-4 pb-3 overflow-x-auto scrollbar-hide">
+        {/* Category Pills - Horizontal Scroll */}
+        <div className="px-4 pb-3 overflow-x-auto hide-scrollbar">
           <div className="flex gap-2">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full whitespace-nowrap text-sm font-medium tap-highlight transition-colors ${
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-full whitespace-nowrap text-sm font-medium tap-highlight transition-colors ${
                   selectedCategory === cat.id
                     ? "bg-primary text-primary-foreground"
                     : "bg-muted text-foreground"
@@ -179,21 +175,20 @@ export default function Explore() {
       </header>
 
       <main className="px-4 py-4 space-y-6">
-        {/* Trending Searches */}
+        {/* Trending Searches - Compact Pills */}
         <section>
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="w-4 h-4 text-primary" />
-            <h2 className="font-semibold text-foreground">Trending Searches</h2>
+            <h2 className="font-semibold text-foreground text-sm">Trending</h2>
           </div>
           <div className="flex flex-wrap gap-2">
             {trendingSearches.map((term) => (
-              <Badge
+              <button
                 key={term}
-                variant="secondary"
-                className="px-3 py-1.5 cursor-pointer tap-highlight hover:bg-accent"
+                className="px-3 py-1.5 bg-muted rounded-full text-xs font-medium text-foreground tap-highlight"
               >
                 {term}
-              </Badge>
+              </button>
             ))}
           </div>
         </section>
@@ -246,6 +241,9 @@ export default function Explore() {
           </div>
         </section>
       </main>
+
+      <BottomNav onSellClick={() => setSellOpen(true)} />
+      <SellDrawer open={sellOpen} onOpenChange={setSellOpen} />
     </div>
   );
 }

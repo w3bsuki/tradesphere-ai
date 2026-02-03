@@ -6,6 +6,7 @@ export interface ListingData {
   id: string;
   title: string;
   price: number;
+  originalPrice?: number;
   currency: string;
   image: string;
   location: string;
@@ -16,6 +17,9 @@ export interface ListingData {
   };
   isPromoted?: boolean;
   isSaved?: boolean;
+  discount?: number;
+  rating?: number;
+  reviewCount?: number;
 }
 
 interface ListingCardProps {
@@ -61,10 +65,15 @@ export function ListingCard({ listing, onSave }: ListingCardProps) {
           />
         </button>
 
-        {/* Promoted badge */}
+        {/* Badges */}
         {listing.isPromoted && (
           <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] px-2 py-0.5">
-            Promoted
+            Promo
+          </Badge>
+        )}
+        {listing.discount && !listing.isPromoted && (
+          <Badge className="absolute top-2 left-2 bg-destructive text-destructive-foreground text-[10px] px-2 py-0.5">
+            -{listing.discount}%
           </Badge>
         )}
       </div>
@@ -72,9 +81,16 @@ export function ListingCard({ listing, onSave }: ListingCardProps) {
       {/* Content */}
       <div className="p-3">
         {/* Price */}
-        <p className="font-bold text-lg text-foreground">
-          {listing.currency}{listing.price.toLocaleString()}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="font-bold text-lg text-foreground">
+            {listing.currency}{listing.price.toLocaleString()}
+          </p>
+          {listing.originalPrice && (
+            <p className="text-xs text-muted-foreground line-through">
+              {listing.currency}{listing.originalPrice.toLocaleString()}
+            </p>
+          )}
+        </div>
         
         {/* Title */}
         <h3 className="text-sm text-foreground line-clamp-1 mt-0.5">
